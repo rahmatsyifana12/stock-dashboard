@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function loginPage()
     {
-        Log::info('User accessed login page');
         return view('login');
     }
 
@@ -27,6 +27,13 @@ class AuthController extends Controller
                 ->withErrors(['login' => 'Invalid email or password'])
                 ->withInput(); // Retain old input data
         }
+
+         // Use Auth facade to get the authenticated user
+        $user = Auth::user();
+        $userId = $user->id;
+
+        // Add user_id, role, and name claims to token
+        $token = JWTAuth::claims(['user_id' => $userId, 'role' => $user->role, 'name' => $user->name])->fromUser($user);
 
         session(['access_token' => $token]);
 
@@ -52,6 +59,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
 
         return redirect('/login');
@@ -61,5 +69,11 @@ class AuthController extends Controller
     {
         session()->forget('access_token');
         return redirect('/login');
+    }
+
+    public function getAuthClaims(Request $request)
+    {
+        $authClaims = $request->get('auth_claims');
+        return response()->json($authClaims);
     }
 }

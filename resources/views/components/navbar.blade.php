@@ -1,3 +1,5 @@
+@props(['role'])
+
 <nav class="bg-white shadow-md">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <!-- Logo -->
@@ -15,11 +17,13 @@
                 class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
                 View Products
             </a>
-            <a 
-                href="/products/create" 
-                class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                Add New Product
-            </a>
+            @if ($role === 'admin')
+                <a 
+                    href="/products/create" 
+                    class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    Add New Product
+                </a>
+            @endif
         </div>
 
         <!-- Profile Dropdown -->

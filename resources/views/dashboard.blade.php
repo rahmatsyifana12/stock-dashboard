@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100">
-    <x-navbar />
+    <x-navbar :role="$role" />
 
     <div class="container mx-auto px-6 py-6">
         <h1 class="text-2xl font-bold">Welcome to the Dashboard</h1>

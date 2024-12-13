@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
 
     // function to display all products
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::all();
 
@@ -20,8 +20,12 @@ class ProductController extends Controller
     }
 
     // function to display create product page
-    public function create()
+    public function create(Request $request)
     {
+        $authClaims = $request->get('auth_claims');
+        if ($authClaims['role'] !== 'admin') {
+            return redirect('/dashboard');
+        }
         return view('products.create');
     }
 
